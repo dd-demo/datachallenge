@@ -4,7 +4,9 @@ import pandas as pd
 import os
 from flask import Flask, jsonify
 import pickle
+from GeoBases import GeoBase
 
+geo_o = GeoBase(data='ori_por', verbose=False)
 sorted_airports = None
 app = Flask(__name__)
 
@@ -18,7 +20,7 @@ def topn(n):
     data = []
     rank = 1
     for index, row in sorted_airports[:n].iterrows():
-        data.append({ "rank" : rank, "code": index, "pax": row[0]})
+        data.append({ "rank" : rank, "code": index, "pax": int(row[0]), "name": geo_o.get(index, 'name')})
         rank +=1
     return jsonify({"status": "success", "airports": data})
 
